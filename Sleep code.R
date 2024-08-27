@@ -16,30 +16,21 @@ if (as.integer(R.version$major) != 4 & as.numeric(R.version$minor) < 1) {
 }
 
 # Step 1a. Loading required packages and functions ----
-install.packages("dplyr")
-install.packages("ggplot2")
-install.packages("lubridate")
-install.packages("progress")
-install.packages("tidyr")
-install.packages("readr")
 library(dplyr)
 library(ggplot2)
 library(lubridate)
 library(progress)
 library(tidyr)
 library(readr)
-source(file = paste0("./d. Processing/Functions/",
-                     "activpalProcessing/R/activpalProcessingFunctions.R"))
-source(file = paste0("./d. Processing/Functions/",
-                     "ActivPalProcessing_V3_adjusted_functions.R"))
-source(file = paste0("./d. Processing/Functions/",
-                     "processing_funs.R"))
+source(file = paste0("./activpalProcessingFunctions.R"))
+source(file = paste0("./ActivPalProcessing_V3_adjusted_functions.R"))
+source(file = paste0("./processing_funs.R"))
 
 # Step 1b. Setting subject specific values ----
 # This values will be the arguments entered into the process_dat function
-dat_source <- "Magee Womens" ##Ask Sarah what this is for
-subject <- "4100713P"
-sleep_source <- "AMSNuMoM2bHHS2-Needs_DATA_2024-02-16_1102.csv"
+dat_source <- "Y:/UP & Rural 24-7/Participant Data/"
+subject <- "8261-AS"
+sleep_source <- "UPRural247SleepDatab_DATA_2024-08-27_1746.csv"
 day1 <- TRUE
 day2 <- TRUE
 day3 <- TRUE
@@ -53,11 +44,10 @@ day8 <- TRUE
 # Step 2. Check argument calls ----
 
 ## dat_source ----
-hold1 <- c("Case Western", "Columbia", "Indiana", "Magee Womens",
-           "Northwestern University", "California Irvine", "Pennsylvania",
-           "Utah")
+hold1 <- "Y:/UP & Rural 24-7/Participant Data/"
+
 if (dat_source %notin% hold1) {
-  stop(paste0("dat_source must be one of the following: ",
+  stop(paste0("dat_source must be from UP & Rural 24-7: ",
               hold1, "\n"))
 }
 
@@ -70,17 +60,15 @@ if (!is.logical(hold2)) {
 # Step 3. Import raw data ----
 
 ## Sleep diary data ----
-sleep <- read.csv(paste0("./c. Participant Data/", sleep_source),
+sleep <- read.csv(paste0("Y:/UP & Rural 24-7/Participant Data/", sleep_source),
                   stringsAsFactors = FALSE)
 
 ## ActivPal data for a specific subject ----
 ## given data source
-hold1 <- c("Case Western", "Columbia", "Indiana", "Magee Womens",
-           "Northwestern University", "California Irvine", "Pennsylvania",
-           "Utah")
-if (dat_source == hold1[1]) {
-  paths <- paste0("./c. Participant Data/",
-                  "Case Western Reserve University (1-1)/",
+hold1 <- "Y:/UP & Rural 24-7/Participant Data/"
+
+dat_source == hold1[1]
+  paths <- paste0("Y:/UP & Rural 24-7/Participant Data/",
                   subject,
                   "/")
   files <- list.files(path = paths, pattern = "EventsEx.csv")
@@ -92,100 +80,6 @@ if (dat_source == hold1[1]) {
     stringsAsFactors = FALSE
   )
   
-  ##I will likely end the code here and update with the correct file path
-} else if (dat_source == hold1[2]) {
-  paths <- paste0("./c. Participant Data/",
-                  "Columbia University (2-1, 2-2)/",
-                  subject,
-                  "/")
-  files <- list.files(path = paths, pattern = "EventsEx.csv")
-  dat <- read.csv(
-    file = paste0(paths, files),
-    skip = 2,
-    header = FALSE,
-    sep  = ";",
-    stringsAsFactors = FALSE
-  )
-} else if (dat_source == hold1[3]) {
-  paths <- paste0("./c. Participant Data/",
-                  "Indiana University (3-1)/",
-                  subject,
-                  "/")
-  files <- list.files(path = paths, pattern = "EventsEx.csv")
-  dat <- read.csv(
-    file = paste0(paths, files),
-    skip = 2,
-    header = FALSE,
-    sep  = ";",
-    stringsAsFactors = FALSE
-  )
-} else if (dat_source == hold1[4]) {
-  paths <- paste0("./c. Participant Data/",
-                  "Magee Womens Hospital (4-1)/",
-                  subject,
-                  "/")
-  files <- list.files(path = paths, pattern = "EventsEx.csv")
-  dat <- read.csv(
-    file = paste0(paths, files),
-    skip = 2,
-    header = FALSE,
-    sep  = ";",
-    stringsAsFactors = FALSE
-  )
-} else if (dat_source == hold1[5]) {
-  paths <- paste0("./c. Participant Data/",
-                  "Northwestern University (5-1)/",
-                  subject,
-                  "/")
-  files <- list.files(path = paths, pattern = "EventsEx.csv")
-  dat <- read.csv(
-    file = paste0(paths, files),
-    skip = 2,
-    header = FALSE,
-    sep  = ";",
-    stringsAsFactors = FALSE
-  )
-} else if (dat_source == hold1[6]) {
-  paths <- paste0("./c. Participant Data/",
-                  "University of California Irvine (6-1, 6-2, 6-3)/",
-                  subject,
-                  "/")
-  files <- list.files(path = paths, pattern = "EventsEx.csv")
-  dat <- read.csv(
-    file = paste0(paths, files),
-    skip = 2,
-    header = FALSE,
-    sep  = ";",
-    stringsAsFactors = FALSE
-  )
-} else if (dat_source == hold1[7]) {
-  paths <- paste0("./c. Participant Data/",
-                  "University of Pennsylvania (7-1, 7-2)/",
-                  subject,
-                  "/")
-  files <- list.files(path = paths, pattern = "EventsEx.csv")
-  dat <- read.csv(
-    file = paste0(paths, files),
-    skip = 2,
-    header = FALSE,
-    sep  = ";",
-    stringsAsFactors = FALSE
-  )
-} else if (dat_source == hold1[8]) {
-  paths <- paste0("./c. Participant Data/",
-                  "University of Utah (8-1, 8-2, 8-3, 8-4, 8-5)/",
-                  subject,
-                  "/")
-  files <- list.files(path = paths, pattern = "EventsEx.csv")
-  dat <- read.csv(
-    file = paste0(paths, files),
-    skip = 2,
-    header = FALSE,
-    sep  = ";",
-    stringsAsFactors = FALSE
-  )
-}
-
 # Step 4. Processing of imported data ----
 
 ## Determining which days have valid data
@@ -1542,12 +1436,10 @@ if (length(hold1) != 0) {
 }
 
 # Step 10. Exporting ----
-hold1 <- c("Case Western", "Columbia", "Indiana", "Magee Womens",
-           "Northwestern University", "California Irvine", "Pennsylvania",
-           "Utah")
-if (dat_source == hold1[1]) {
-  paths <- paste0("./c. Participant Data/",
-                  "Case Western Reserve University (1-1)/",
+hold1 <- "Y:/UP & Rural 24-7/Participant Data/"
+
+dat_source == hold1[1]
+  paths <- paste0("Y:/UP & Rural 24-7/Participant Data/",
                   subject_id,
                   "/")
   readr::write_csv(x = dat,
@@ -1559,102 +1451,3 @@ if (dat_source == hold1[1]) {
   pdf(file = paste0(paths, subject_id, "_graphs.pdf"), width = 11, height = 8.5)
   plot(g)
   dev.off()
-} else if (dat_source == hold1[2]) {
-  paths <- paste0("./c. Participant Data/",
-                  "Columbia University (2-1, 2-2)/",
-                  subject,
-                  "/")
-  readr::write_csv(x = dat,
-                   file = paste0(paths, subject_id, "_eventfile.csv"),
-                   na = "")
-  readr::write_csv(x = variables,
-                   file = paste0(paths, subject_id, "_daily_values.csv"),
-                   na = "")
-  pdf(file = paste0(paths, subject_id, "_graphs.pdf"), width = 11, height = 8.5)
-  plot(g)
-  dev.off()
-} else if (dat_source == hold1[3]) {
-  paths <- paste0("./c. Participant Data/",
-                  "Indiana University (3-1)/",
-                  subject,
-                  "/")
-  readr::write_csv(x = dat,
-                   file = paste0(paths, subject_id, "_eventfile.csv"),
-                   na = "")
-  readr::write_csv(x = variables,
-                   file = paste0(paths, subject_id, "_daily_values.csv"),
-                   na = "")
-  pdf(file = paste0(paths, subject_id, "_graphs.pdf"), width = 11, height = 8.5)
-  plot(g)
-  dev.off()
-} else if (dat_source == hold1[4]) {
-  paths <- paste0("./c. Participant Data/",
-                  "Magee Womens Hospital (4-1)/",
-                  subject,
-                  "/")
-  readr::write_csv(x = dat,
-                   file = paste0(paths, subject_id, "_eventfile.csv"),
-                   na = "")
-  readr::write_csv(x = variables,
-                   file = paste0(paths, subject_id, "_daily_values.csv"),
-                   na = "")
-  pdf(file = paste0(paths, subject_id, "_graphs.pdf"), width = 11, height = 8.5)
-  plot(g)
-  dev.off()
-} else if (dat_source == hold1[5]) {
-  paths <- paste0("./c. Participant Data/",
-                  "Northwestern University (5-1)/",
-                  subject,
-                  "/")
-  readr::write_csv(x = dat,
-                   file = paste0(paths, subject_id, "_eventfile.csv"),
-                   na = "")
-  readr::write_csv(x = variables,
-                   file = paste0(paths, subject_id, "_daily_values.csv"),
-                   na = "")
-  pdf(file = paste0(paths, subject_id, "_graphs.pdf"), width = 11, height = 8.5)
-  plot(g)
-  dev.off()
-} else if (dat_source == hold1[6]) {
-  paths <- paste0("./c. Participant Data/",
-                  "University of California Irvine (6-1, 6-2, 6-3)/",
-                  subject,
-                  "/")
-  readr::write_csv(x = dat,
-                   file = paste0(paths, subject_id, "_eventfile.csv"),
-                   na = "")
-  readr::write_csv(x = variables,
-                   file = paste0(paths, subject_id, "_daily_values.csv"),
-                   na = "")
-  pdf(file = paste0(paths, subject_id, "_graphs.pdf"), width = 11, height = 8.5)
-  plot(g)
-  dev.off()
-} else if (dat_source == hold1[7]) {
-  paths <- paste0("./c. Participant Data/",
-                  "University of Pennsylvania (7-1, 7-2)/",
-                  subject,
-                  "/")
-  readr::write_csv(x = dat,
-                   file = paste0(paths, subject_id, "_eventfile.csv"),
-                   na = "")
-  readr::write_csv(x = variables,
-                   file = paste0(paths, subject_id, "_daily_values.csv"),
-                   na = "")
-  pdf(file = paste0(paths, subject_id, "_graphs.pdf"), width = 11, height = 8.5)
-  plot(g)
-  dev.off()
-} else if (dat_source == hold1[8]) {
-  paths <- paste0("./c. Participant Data/",
-                  "University of Utah (8-1, 8-2, 8-3, 8-4, 8-5)/",
-                  subject,
-                  "/")
-  readr::write_csv(x = dat,
-                   file = paste0(paths, subject_id, "_eventfile.csv"),
-                   na = "")
-  readr::write_csv(x = variables,
-                   file = paste0(paths, subject_id, "_daily_values.csv"),
-                   na = "")
-  pdf(file = paste0(paths, subject_id, "_graphs.pdf"), width = 11, height = 8.5)
-  plot(g)
-  dev.off()
-}
