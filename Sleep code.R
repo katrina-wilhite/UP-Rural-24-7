@@ -636,7 +636,7 @@ temp_sleep <- temp_sleep[order(temp_sleep$time), ]
 ## ActivPal data ----
 
 ### Rearrange the variables to be in the order Kate Lyden used
-dat <- dplyr::bind_cols(dat[, c(1, 3, 5, 4, 7, 8, 9, 10, 11)],
+dat <- dplyr::bind_cols(dat[, c(1, 3, 5, 4, 9, 10, 11, 12, 13)],
                         dat[, c(2, 6, 12, 13, 14, 15, 16, 17)])
 
 ### Pulling the first six variables of data. To process the ActivPal data these
