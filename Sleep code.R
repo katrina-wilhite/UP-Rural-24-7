@@ -892,6 +892,7 @@ sec_by_sec <- dplyr::rename(sec_by_sec,
 n <- as.numeric(nrow(sec_by_sec))
 
 #### 1 sec met values ----
+##Potentially delete the following line. 
 sec_by_sec$met.hours <- sec_by_sec$met.hours / sec_by_sec$interval
 sec_by_sec$mets1 <- (sec_by_sec$met.hours * 3600) / sec_by_sec$interval
 sec_by_sec <- dplyr::relocate(sec_by_sec, mets1, .after = met.hours)
