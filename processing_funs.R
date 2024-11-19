@@ -734,21 +734,29 @@ process_dat <- function(dat_source, subject, sleep_source,
   #### wake up
   dat$interval[t] <- 1
   
-  ### Met hours ----
-  for (j in 1:length(dat$time)) {
-    if (is.na(dat$methrs[j]) & (dat$wear_day[j] %in% good_days)) {
-      mets <- dat$methrs[j - 1] / (dat$interval[j - 1] / 3600)
-      first_position_time <- as.numeric(difftime(dat$time[j], dat$time[j - 1], 
-                                                 units = "hours"))
-      second_position_time <- as.numeric(difftime(dat$time[j + 1], dat$time[j],
-                                                  units = "hours"))
-      totaltime <- dat$interval[j - 1]
-      first_factor <- (first_position_time / totaltime) * mets
-      second_factor <- (second_position_time / totaltime) * mets
-      dat$methrs[j - 1] <- first_factor * first_position_time
-      dat$methrs[j] <- second_factor * second_position_time
-    } else {
-      dat$methrs[j] <- dat$methrs[j]
+  ### Met hours ####
+  # Split indicator
+  condition <- is.na(dat$time)
+  for(i in 1:(length(dat$methrs))){
+    if(is.na(dat$methrs[i])){
+      condition[c(`i`, `i`-1)] <- TRUE
+    }
+  }
+  row.names(dat) <- seq_along(dat$time) # Re-order the row names
+  
+  # Computing marker variables to indicate the same activity
+  dat$marker <- ifelse(condition & !is.na(dat$methrs), 1, NA)
+  dat$marker2 <- NA
+  dat$marker2[which(dat$marker == 1)] <- seq_len(sum(dat$marker, na.rm = TRUE))
+  dat[condition,] <- tidyr::fill(dat[condition,], marker2, .direction = "down")
+  
+  # Computing proportional MET values by the interval
+  for(j in seq_along(unique(dat$marker2)[-1])){
+    a <- subset(dat, marker2 == `j`)
+    b <- a$methrs[1]
+    denom <- sum(a$interval)
+    for(i in 1:length(a$methrs)){
+      dat[which(dat$marker2 == `j` & condition),]$methrs[i] <- b * (a$interval[i] / denom)
     }
   }
   
