@@ -29,8 +29,8 @@ source(file = paste0("./processing_funs.R"))
 # Step 1b. Setting subject specific values ----
 # This values will be the arguments entered into the process_dat function
 dat_source <- "Y:/UP & Rural 24-7/Participant Data/"
-subject <- "TEST-KT"
-sleep_source <- "UPRural247SleepDatab_DATA_2024-09-17_1020.csv"
+subject <- "8272-MS"
+sleep_source <- "UPRural247SleepDatab_DATA_2024-11-12_1336.csv"
 day1 <- TRUE
 day2 <- TRUE
 day3 <- TRUE
@@ -892,8 +892,8 @@ sec_by_sec <- dplyr::rename(sec_by_sec,
 n <- as.numeric(nrow(sec_by_sec))
 
 #### 1 sec met values ----
-##Potentially delete the following line. 
-sec_by_sec$met.hours <- sec_by_sec$met.hours / sec_by_sec$interval
+##First line deleted to remove "double dividing" of total duration 
+#sec_by_sec$met.hours <- sec_by_sec$met.hours / sec_by_sec$interval
 sec_by_sec$mets1 <- (sec_by_sec$met.hours * 3600) / sec_by_sec$interval
 sec_by_sec <- dplyr::relocate(sec_by_sec, mets1, .after = met.hours)
 
