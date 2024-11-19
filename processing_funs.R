@@ -1,6 +1,7 @@
 # The function of this script file is to be a collection of usable R functions
 # that are used to process the data. These functions do not include the adjusted
 # activpalProcessing functions based on Kate Lyden's old package.
+##My code will be dfferent than Sarah's AMA code because she has multiple sites and I only have one. 
 `%notin%` <- Negate(`%in%`)
 
 process_dat <- function(dat_source, subject, sleep_source,
