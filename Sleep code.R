@@ -29,8 +29,8 @@ source(file = paste0("./processing_funs.R"))
 # Step 1b. Setting subject specific values ----
 # This values will be the arguments entered into the process_dat function
 dat_source <- "Y:/UP & Rural 24-7/Participant Data/"
-subject <- "8104-KS"
-sleep_source <- "UPRural247SleepDatab_DATA_2024-11-12_1336.csv"
+subject <- "8126-AB"
+sleep_source <- "UPRural247SleepDatab_DATA_2024-12-10_1142.csv"
 day1 <- TRUE
 day2 <- TRUE
 day3 <- TRUE
